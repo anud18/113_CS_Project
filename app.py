@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, jsonify, url_for
 from edit import edit_clip
 import os
+import shutil #刪除資料夾
 
 app = Flask(__name__)
 
@@ -65,24 +66,32 @@ def cutVideo():
     # test
     print(f"Received Video URL: {video_url}")
     print(f"Received Video Filename: {video_filename}")
+    
+    # 設定編輯後的資料夾路徑
+    edited_folder_path = f"{EDITED_FOLDER}/{only_video_name}"
+    
+    # 如果資料夾已存在，檢查資料夾是否包含影片
+    if os.path.isdir(edited_folder_path):
+        print(f"{edited_folder_path} exists.")
+        # 獲取資料夾內的影片檔案列表
+        existing_files = os.listdir(edited_folder_path)
+        video_files = [file for file in existing_files if file.endswith('.mp4')]
 
-    
-    # 如果已經有剪過該影片 直接從edited_folder裡拿
-    if os.path.isdir(f"{EDITED_FOLDER}/{only_video_name}"):
-        print(f"{EDITED_FOLDER}/{only_video_name}")
-        print("folder exsists.")
-        return redirect(url_for('edited',sourcefile=only_video_name))
-    
-    
-    # 如果沒剪過的話 就剪片
+        if video_files:
+            # 如果資料夾內有影片，直接提取
+            print("Folder exists and contains video(s). Returning existing video(s).")
+            return redirect(url_for('edited', sourcefile=only_video_name))
+        else:
+            # 資料夾存在但沒有影片
+            print("Folder exists but no videos found. Proceeding to clip and save new video.")
+            edited_filename = edit_clip(video_filename)
     else:
-        print(f"{EDITED_FOLDER}/{video_filename.split('.')[0]}")
-        print(f"folder doesnot exsist. go to edit_clip()\n")
+        # 資料夾不存在，創建資料夾並進行影片剪輯
+        print(f"Folder {edited_folder_path} does not exist. Creating folder and proceeding to clip video.")
+        os.makedirs(edited_folder_path)
         edited_filename = edit_clip(video_filename)
 
-    print("back")
-    return jsonify({"message": "Video info received successfully", "filename":edited_filename}), 200
-
+    return jsonify({"message": "Video info received successfully","filename": edited_filename}),200
 
 
 @app.route('/edited/<sourcefile>')
@@ -118,7 +127,29 @@ def edited(sourcefile):
             "message": "Failed to fetch video list",
             "error": str(e)
         }), 500
+        
 
+#刪除紐
+@app.route('/delete_video', methods=['POST'])
+def delete_video():
+    data = request.get_json()
+    filename = data.get('filename')
+
+    try:
+        # 刪除 SOURCE_FOLDER 中的影片
+        source_path = os.path.join(SOURCE_FOLDER, filename)
+        if os.path.exists(source_path):
+            os.remove(source_path)
+
+        # 刪除 EDITED_FOLDER 中的影片資料夾
+        edited_folder_path = os.path.join(EDITED_FOLDER, filename.split('.')[0])
+        if os.path.exists(edited_folder_path):
+            shutil.rmtree(edited_folder_path)
+
+        return jsonify({"message": f"{filename} 刪除成功"}), 200
+
+    except Exception as e:
+        return jsonify({"message": "刪除影片失敗", "error": str(e)}), 500
 
 
 

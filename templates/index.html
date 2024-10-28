@@ -10,12 +10,23 @@
             flex-wrap: wrap;
         }
         .video-item {
+            position: relative; 
             margin: 15px;
             text-align: center;
+            width: 300px; 
         }
         video {
             width: 300px;
             height: 200px;
+        }
+        .delete-button {
+            position: absolute;
+            bottom: 10px;
+            right: 0px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -35,9 +46,11 @@
             fetch('/index')
                 .then(response => response.json())
                 .then(data => {
+                    const videoContainer = document.getElementById('videoContainer');
+                    videoContainer.innerHTML = '';  // 清空容器
+                    
                     if (data.videos && data.videos.length > 0) {
-                        const videoContainer = document.getElementById('videoContainer');
-                        
+
                         data.videos.forEach(video => {
                             
                             const videoElement = document.createElement('div');
@@ -45,20 +58,22 @@
                             
                             // video tag
                             videoElement.innerHTML = `
-                                <button>
+                            <button onclick="sendVideoInfo('${video.url}', '${video.filename}')">
                                 <video controls>
                                     <source src="${video.url}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
                                 <p>${video.filename}</p>
-                                </button>
-                            `;
+                            </button>
+                            <button class="delete-button" onclick="deleteVideo('${video.filename}')">🗑️</button>
+                        `;
+
                             videoElement.onclick = () => sendVideoInfo(video.url, video.filename);
 
                             videoContainer.appendChild(videoElement);
                         });
                     } else {
-                        document.getElementById('videoContainer').innerHTML = 'No videos found.';
+                        videoContainer.innerHTML = 'No videos found.';
                     }
                 })
                 .catch(error => {
@@ -66,10 +81,27 @@
                 });
         }
 
+        // 刪除影片的函數
+        function deleteVideo(filename) {
+            event.stopPropagation();  // 防止觸發影片播放
+            fetch('/delete_video', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                fetchVideos();  // 刪除後刷新影片列表
+            })
+            .catch(error => {
+                console.error('Error deleting video:', error);
+            });
+        }
 
-
-
-        function sendVideoInfo(url, filename) {
+        function sendVideoInfo(url, filename) { 
             // POST 要求傳送video資訊   
             fetch('/cutVideo', {
                 method: 'POST',
@@ -84,7 +116,7 @@
             })
             .catch(error => {
                 console.error('Error sending video info:', error);
-            });
+            })            
 
             // URL跟檔名在console print
             console.log('Video URL:', url);
