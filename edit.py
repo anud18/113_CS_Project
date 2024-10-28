@@ -31,9 +31,10 @@ def edit_clip(imgName): #img.filename (test.mp4) file+extension進來
     # Create folder name (static/video/test) folder name 為 file name的路徑
     output_folder = os.path.join("static/video/", original_filename)
 
+    #已寫在app.py的cutvideo中
     # Create the output folder if it doesn't exist 如果沒有folder，新增folder name 為 file name
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+    #if not os.path.exists(output_folder):
+    #    os.makedirs(output_folder)
     
 
     # clip할 파일 경로 要剪片的 file 路徑
@@ -141,7 +142,7 @@ def edit_clip(imgName): #img.filename (test.mp4) file+extension進來
     
     
     #依[段落摘要][段落內容]切割分段結果
-    matches = re.findall(r"\[段落摘要\](.*?)\s*\[段落內容\]\s*(.*?)(?=\[段落摘要\]|\Z)", gpt_output, re.DOTALL)
+    matches = re.findall(r"\[段落摘要\]\s*\n(.*?)\n\[段落內容\]\s*\n(.*?)(?=\[段落摘要\]|\Z)", gpt_output, re.DOTALL)
     
     #分割完後存到titles、contents
     for match in matches:
