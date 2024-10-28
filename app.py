@@ -70,18 +70,22 @@ def cutVideo():
     # 如果已經有剪過該影片 直接從edited_folder裡拿
     if os.path.isdir(f"{EDITED_FOLDER}/{only_video_name}"):
         print(f"{EDITED_FOLDER}/{only_video_name}")
-        print("folder exsists.")
-        return redirect(url_for('edited',sourcefile=only_video_name))
+        print("folder exists.")
+        return jsonify({
+            "message": "Video already edited",
+            "redirect_url": url_for('edited', sourcefile=only_video_name)
+        }), 200
     
     
     # 如果沒剪過的話 就剪片
     else:
         print(f"{EDITED_FOLDER}/{video_filename.split('.')[0]}")
-        print(f"folder doesnot exsist. go to edit_clip()\n")
+        print("folder does not exist. go to edit_clip()\n")
         edited_filename = edit_clip(video_filename)
-
-    print("back")
-    return jsonify({"message": "Video info received successfully", "filename":edited_filename}), 200
+        return jsonify({
+            "message": "Video edited successfully",
+            "redirect_url": url_for('edited', sourcefile=only_video_name)
+        }), 200
 
 
 

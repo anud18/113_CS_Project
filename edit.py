@@ -141,7 +141,7 @@ def edit_clip(imgName): #img.filename (test.mp4) file+extension進來
     
     
     #依[段落摘要][段落內容]切割分段結果
-    matches = re.findall(r"\[段落摘要\]\n(.*?)\n\[段落內容\]\n(.*?)(?=\[段落摘要\]|\Z)", gpt_output, re.DOTALL)
+    matches = re.findall(r"\[段落摘要\](.*?)\s*\[段落內容\]\s*(.*?)(?=\[段落摘要\]|\Z)", gpt_output, re.DOTALL)
     
     #分割完後存到titles、contents
     for match in matches:

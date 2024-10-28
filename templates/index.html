@@ -80,7 +80,12 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Response from server:', data);
+                if (data.redirect_url) {
+                    // 轉換到sever傳的redirect URL
+                    window.location.href = data.redirect_url;
+                } else {
+                    console.error("Redirect URL not provided.");
+                }
             })
             .catch(error => {
                 console.error('Error sending video info:', error);
