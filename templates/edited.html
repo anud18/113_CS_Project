@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edited Videos</title>
+    <style>
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .video-item {
+            margin: 15px;
+            text-align: center;
+        }
+        video {
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function backtohome() {
+            window.location.href = '/';
+        }
+    </script>
+    <h1>Edited Videos</h1>
+    <div> <button onclick="backtohome()"> back to home </button></div>
+    <div class="video-container">
+        {% if videos %}
+            {% for video in videos %}
+                <div class="video-item">
+                    <video controls>
+                        <source src="{{ video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>{{ video.filename }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No videos found.</p>
+        {% endif %}
+    </div>
+    
+</body>
+</html>

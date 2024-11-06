@@ -80,7 +80,7 @@ def cutVideo():
         if video_files:
             # 如果資料夾內有影片，直接提取
             print("Folder exists and contains video(s). Returning existing video(s).")
-            return redirect(url_for('edited', sourcefile=only_video_name))
+            
         else:
             # 資料夾存在但沒有影片
             print("Folder exists but no videos found. Proceeding to clip and save new video.")
