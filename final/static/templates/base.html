@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影片剪輯精靈</title>
+    <link rel="stylesheet" href = "/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    {% block styles %}{% endblock %} <!-- 使用此代碼才能在其他頁面分別應用各自的 CSS -->
+</head>
+<body>
+    {% include 'navbar.html' %}  <!-- 包含頂部導航欄 -->
+    
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

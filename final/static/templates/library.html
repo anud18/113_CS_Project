@@ -1,0 +1,27 @@
+<!-- templates/library.html -->
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/library.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>影片庫</h1>
+    <div id="video-list"></div>
+</div>
+
+<!-- 模態彈出視窗 -->
+<div id="video-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <video class="modal-video" controls>
+            <source id="modal-video-source" src="" type="video/mp4">
+            您的瀏覽器不支持 video 標籤。
+        </video>
+        <div id="modal-video-details"></div>
+    </div>
+</div>
+
+<script src="/static/js/library.js"></script>
+{% endblock %}

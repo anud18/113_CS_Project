@@ -1,0 +1,67 @@
+/* Reset 基本樣式 */
+body, h2, h3, a {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 導航欄樣式 */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* 左右排列元素 */
+    align-items: center; /* 垂直居中對齊 */
+    background-color: #5a8fe3; /* 背景色 */
+    color: white; /* 文字顏色 */
+    padding: 10px 250px; /* 上下及左右內間距 */
+    position: sticky; /* 滾動時固定在頂部 */
+    top: 0; /* 固定於頂部位置 */
+    z-index: 1000; /* 顯示在其他元素上方 */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* 底部陰影 */
+    height: 50px;
+}
+
+/* 標題文字樣式 */
+.navbar h2, .navbar h3 {
+    color: white;
+    margin: 0;
+    font-weight: normal;
+}
+
+/* 標誌樣式 */
+.navbar a.no-change h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.navbar a.no-change h2:hover {
+    color: #0b3655; /* 標誌懸停效果 */
+}
+
+/* 導航連結樣式 */
+.navbar h3 a {
+    color: white !important;
+    margin: 0 10px; /* 連結之間的間距 */
+    font-size: 18px;
+    font-weight: normal;
+    transition: color 0.3s ease;
+}
+
+.navbar h3 a:hover {
+    color: #26891d; /* 連結懸停效果 */
+}
+
+/* 響應式設計 */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* 垂直排列 */
+        text-align: center;
+    }
+
+    .navbar h3 {
+        margin-top: 10px; /* 增加上下間距 */
+    }
+}

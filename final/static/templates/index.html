@@ -1,0 +1,50 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>編輯您的影片</h1>
+    <div class="upload">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file-upload">選擇文件</label>
+            <input type="file" name="file" id="file-upload" class="upload-input" style="display: none;" required/>
+            <button type="submit" class="upload-button">上傳</button>
+        </form>
+        
+    </div>
+
+    <h1>最近的影片</h1>
+    <div id="video-list"></div>
+
+    <hr>
+    
+    <div>
+        <h1>使用說明</h1>
+        <div class="howto">
+1. 點擊“選擇文件”選擇要上傳的影片，並點擊“上傳”開始上傳<br>
+2. 點擊“尚未剪輯過的影片”即可開始剪輯，一次只能剪輯一部影片，直到該影片剪輯完成後才能開始下一部影片<br>
+3. 點擊“已剪輯過的影片”，可查看該影片剪輯後的片段<br>
+4. 點擊“刪除”會刪除該影片及其剪輯後的所有片段<br>
+5. “最近的影片”會顯示最近使用過的4部影片，如需查看以前的所有影片，請點擊“Library”進行查看<br>
+        </div>
+    </div>
+</div>
+
+<!-- 模態彈出視窗 -->
+<div id="video-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <video class="modal-video" controls>
+            <source id="modal-video-source" src="" type="video/mp4">
+            您的瀏覽器不支持 video 標籤。
+        </video>
+        <div id="modal-video-details"></div>
+    </div>
+</div>
+
+<script src="/static/js/index.js"></script>
+{% endblock %}

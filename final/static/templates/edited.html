@@ -1,0 +1,54 @@
+<!-- templates/edited.html -->
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edited.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>已編輯的影片</h1>
+    選擇您想下載的影片
+
+    <div id="video-list">
+        {% if videos %}
+            {% for video in videos %}
+                <div class="video-item" onclick="">
+                    <button class="video-button">
+                        <video controls>
+                            <source src="{{ video.url }}" type="video/mp4">
+                            您的瀏覽器不支持 video 標籤。
+                        </video>
+                        <p>{{ video.filename }}</p>                        
+                        <!-- 將複選框實現為按鈕樣式 -->
+                    <input type="checkbox" class="video-checkbox" id="checkbox-{{ loop.index }}" value="{{ video.url }}" onchange="toggleBorder(this)" onclick="event.stopPropagation()">
+                    <label for="checkbox-{{ loop.index }}" class="checkbox-button">選擇</label>
+                    <button class="detail-button" onclick="showModal('{{ video.url }}', '{{ video.filename }}')">詳細資訊</button>
+                    </button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>未找到影片。</p>
+        {% endif %}
+    </div>
+    <div>
+        <button onclick="download()" class="download-button">下載</button>
+        <button onclick="backtohome()" class="home-button">回到主頁</button>
+    </div>
+
+</div>
+
+<!-- 模態彈出視窗 -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <video id="modal-video" controls>
+            <source id="modal-video-source" src="" type="video/mp4">
+            您的瀏覽器不支持 video 標籤。
+        </video>
+        <p id="modal-filename"></p>
+    </div>
+</div>
+
+<script src="/static/js/edited.js"></script>
+{% endblock %}
